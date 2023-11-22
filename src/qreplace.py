@@ -58,14 +58,14 @@ class QReplace(Tk):
         self.prefix_label = Label(self.entries_frame, text="Prefix:")
         self.prefix_label.grid(row=0, column=0)
 
-        self.prefix_entry = Entry(self.entries_frame)
+        self.prefix_entry = Entry(self.entries_frame, width=18)
         self.prefix_entry.grid(row=0, column=1)
         self.prefix_entry.insert("end", self.configurations.get("default_prefix"))
 
         self.suffix_label = Label(self.entries_frame, text="Suffix:")
         self.suffix_label.grid(row=1, column=0)
 
-        self.suffix_entry = Entry(self.entries_frame)
+        self.suffix_entry = Entry(self.entries_frame, width=18)
         self.suffix_entry.grid(row=1, column=1)
         self.suffix_entry.insert("end", self.configurations.get("default_suffix"))
 

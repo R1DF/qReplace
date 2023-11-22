@@ -3,10 +3,21 @@ from tkinter import Tk, Frame, Listbox, Scrollbar
 from replacer import Replacer
 
 # ReplacerListbox class
-class ReplacerListbox(Listbox):
+class ReplacerListbox:
     def __init__(self, master: Tk | Frame, **args):
         self.master = master
-        super().__init__(master, **args)
+        self.replacer_listbox_frame = Frame(master)
+        self.replacer_listbox_frame.pack()
+
+        self.replacer_listbox = Listbox(self.replacer_listbox_frame, **args)
+        self.replacer_listbox.pack(side="left")
+
+        self.scrollbar = Scrollbar(self.replacer_listbox_frame)
+        self.scrollbar.pack(side="right", fill="both")
+
+        self.replacer_listbox.config(yscrollcommand=self.scrollbar.set)
+        self.scrollbar.config(command=self.replacer_listbox.yview)
+
         self._contents = []
 
     # Methods

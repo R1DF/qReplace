@@ -4,8 +4,8 @@ class Replacer:
         self.phrase = phrase
         self.replacement = replacement
 
-    def get_ahk_code(self, prefix: str) -> str:
-        return f":?c*:{prefix}{self.phrase}::{self.replacement}"
+    def get_ahk_code(self, prefix: str = "", suffix: str = "") -> str:
+        return f":?c*:{prefix}{self.phrase}{suffix}::{self.replacement}"
 
 
     def __repr__(self) -> str:

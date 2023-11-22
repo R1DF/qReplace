@@ -1,1 +1,3 @@
-resolution = [420, 260]
+resolution = [440, 260]
+default_prefix = ""
+default_suffix = ""

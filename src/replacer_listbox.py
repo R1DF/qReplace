@@ -2,10 +2,15 @@
 from tkinter import Tk, Frame, Listbox, Scrollbar
 from replacer import Replacer
 
+
 # ReplacerListbox class
 class ReplacerListbox:
     def __init__(self, master: Tk | Frame, **args):
+        # Initialisation
         self.master = master
+        self._contents = []
+
+        # Widget creation
         self.replacer_listbox_frame = Frame(master)
         self.replacer_listbox_frame.pack()
 
@@ -18,17 +23,19 @@ class ReplacerListbox:
         self.replacer_listbox.config(yscrollcommand=self.scrollbar.set)
         self.scrollbar.config(command=self.replacer_listbox.yview)
 
-        self._contents = []
-
     # Methods
     def add_item(self, phrase: str, replacement: str):
-        pass
+        self._contents.append(Replacer(phrase, replacement))
+        self.replacer_listbox.insert("end", f"{phrase}: {replacement}")
 
     def edit_item(self, index: int, new_phrase: str, new_replacement: str):
-        pass
+        self.remove_item(index)
+        self._contents.insert(index, Replacer(new_phrase, new_replacement))
+        self.replacer_listbox.insert(index, f"{new_phrase}: {new_replacement}")
 
     def remove_item(self, index: int):
-        pass
+        self._contents.pop(index)
+        self.replacer_listbox.delete(index)
 
     # Properties
     @property

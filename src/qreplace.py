@@ -2,6 +2,7 @@
 from tkinter import Tk, Frame, Entry, Label, Button, Menu, PhotoImage
 from config_reader import ConfigReader
 from replacer_listbox import ReplacerListbox
+from toplevels import AddToplevel, EditToplevel
 import os
 
 
@@ -10,6 +11,11 @@ class QReplace(Tk):
     def __init__(self, version: str, configurations: ConfigReader):
         # Window creation
         super().__init__()
+        self.child_toplevels = {
+            "add": False,
+            "edit": False,
+            "about": False
+        }
         self.configurations = configurations
         self.title(f"qReplace v{version}")
         self.resizable(False, False)
@@ -72,19 +78,32 @@ class QReplace(Tk):
         self.buttons_frame = Frame(self.right_frame)
         self.buttons_frame.pack()
 
-        self.add_button = Button(self.buttons_frame, text="Add", width=15)
+        self.add_button = Button(self.buttons_frame, text="Add", width=15, command=self.handle_add)
         self.add_button.pack(pady=4)
 
-        self.edit_button = Button(self.buttons_frame, text="Edit", width=15)
+        self.edit_button = Button(self.buttons_frame, text="Edit", width=15, command=self.handle_edit)
         self.edit_button.pack(pady=4)
 
-        self.remove_button = Button(self.buttons_frame, text="Remove", width=15)
+        self.remove_button = Button(self.buttons_frame, text="Remove", width=15, command=self.handle_remove)
         self.remove_button.pack(pady=4)
 
-        self.save_button = Button(self.buttons_frame, text="Save", width=15)
+        self.save_button = Button(self.buttons_frame, text="Save", width=15, command=self.handle_save)
         self.save_button.pack(pady=4)
-
-
 
         # Mainloop
         self.mainloop()
+
+    # Handler methods
+    def handle_add(self):
+        if not self.child_toplevels["add"]:
+            AddToplevel(self)
+
+    def handle_edit(self):
+        if not self.child_toplevels["edit"]:
+            EditToplevel(self)
+
+    def handle_remove(self):
+        pass
+
+    def handle_save(self):
+        pass

@@ -6,6 +6,7 @@ from qreplace import QReplace
 VERSION = "0.0.0"
 SAFE = True  # Set to false to disable error handler
 
+
 # Run function
 def run():
     configurations = ConfigReader()

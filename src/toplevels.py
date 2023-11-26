@@ -1,5 +1,8 @@
 # Imports
-from tkinter import Tk, Toplevel, Frame, Entry, Label, Button, messagebox
+from tkinter import Tk, Toplevel, Frame, Entry, Label, Button, PhotoImage, messagebox
+import os
+import webbrowser
+
 
 # Base toplevel
 class BaseToplevel(Toplevel):
@@ -150,5 +153,27 @@ class AboutToplevel(BaseToplevel):
         super().__init__(master, "about")
         # Initialisation
         self.title("About qReplace")
-        self.geometry("225x100")
+        self.geometry("410x130")
         self.resizable(False, False)
+        url_to_open = "https://github.com/R1DF/qReplace"
+
+        # Getting icon photo
+        self.icon_photoimage = PhotoImage(file=os.path.join(os.getcwd(), "assets", "icon_32x32.png"))
+
+        # Widget creation
+        self.icon_label = Label(self, image=self.icon_photoimage)
+        self.icon_label.pack()
+
+        self.description_label = Label(
+            self,
+            text=f"qReplace v{self.master.version}\n"
+                 "A simple program that makes making AutoHotkey files that map\n"
+                 "character combinations easier for you.\n"
+                 "Created by R1DF."
+        )
+        self.description_label.pack()
+
+        self.open_repository_button = Button(self,
+                                             text="Open GitHub repository",
+                                             command=lambda: webbrowser.open_new_tab(url_to_open))
+        self.open_repository_button.pack()

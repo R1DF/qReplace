@@ -15,6 +15,8 @@ class QReplace(Tk):
         self.child_toplevels = {
             "add": False,
             "edit": False,
+            "open_recent": False,
+            "preferences": False,
             "about": False
         }
         self.version = version

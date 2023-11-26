@@ -121,3 +121,34 @@ class EditToplevel(BaseToplevel):
         # Editing and closing
         self.master.replacer_listbox.edit_item(self.entry_index, phrase, replacement)
         self.handle_close()
+
+
+# Open Recent toplevel
+# About toplevel
+class OpenRecentToplevel(BaseToplevel):
+    def __init__(self, master):
+        super().__init__(master, "open_recent")
+        # Initialisation
+        self.title("Open recent")
+        self.geometry("225x100")
+        self.resizable(False, False)
+
+
+# Preferences toplevel
+class PreferencesToplevel(BaseToplevel):
+    def __init__(self, master):
+        super().__init__(master, "preferences")
+        # Initialisation
+        self.title("Preferences")
+        self.geometry("225x100")
+        self.resizable(False, False)
+
+
+# About toplevel
+class AboutToplevel(BaseToplevel):
+    def __init__(self, master):
+        super().__init__(master, "about")
+        # Initialisation
+        self.title("About qReplace")
+        self.geometry("225x100")
+        self.resizable(False, False)

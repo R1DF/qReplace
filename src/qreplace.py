@@ -1,5 +1,5 @@
 # Imports
-from tkinter import Tk, Frame, Entry, Label, Button, Menu, PhotoImage
+from tkinter import Tk, Frame, Entry, Label, Button, Menu, PhotoImage, messagebox
 from config_reader import ConfigReader
 from replacer_listbox import ReplacerListbox
 from toplevels import AddToplevel, EditToplevel
@@ -100,10 +100,28 @@ class QReplace(Tk):
 
     def handle_edit(self):
         if not self.child_toplevels["edit"]:
-            EditToplevel(self)
+            # Getting index of the entry in the listbox to edit
+            entry_index = self.replacer_listbox.replacer_listbox.curselection()
+
+            if not entry_index:  # If the user didn't select an entry
+                messagebox.showerror("Error", "Please select an entry to edit.")
+                return
+
+            # Creating edit entry
+            original_phrase = self.replacer_listbox.contents[entry_index[0]].phrase
+            original_replacement = self.replacer_listbox.contents[entry_index[0]].replacement
+            EditToplevel(self, entry_index[0], original_phrase, original_replacement)
 
     def handle_remove(self):
-        pass
+        # Getting index of the entry in the listbox to remove
+        entry_index = self.replacer_listbox.replacer_listbox.curselection()
+
+        if not entry_index:  # If the user didn't select an entry
+            messagebox.showerror("Error", "Please select an entry to remove.")
+            return
+
+        # Removing item
+        self.replacer_listbox.remove_item(entry_index[0])
 
     def handle_save(self):
         pass

@@ -37,7 +37,15 @@ class ReplacerListbox:
         self._contents.pop(index)
         self.replacer_listbox.delete(index)
 
+    def erase(self):
+        self._contents = []
+        self.replacer_listbox.delete(0, "end")
+
     # Properties
     @property
     def contents(self) -> list[Replacer]:
         return self._contents
+
+    @property
+    def is_empty(self) -> bool:
+        return len(self._contents) == 0

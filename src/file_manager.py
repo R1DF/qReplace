@@ -26,7 +26,7 @@ def save_list_as_ahk(filename: str, prefix: str, suffix: str, version: str, repl
 
 
 # Opening .ahk file as a list of Replace objects
-def open_ahk_as_list(path: str) -> list[Replacer]:
+def open_ahk_as_dict(path: str) -> dict:
     replacers = []
     with open(path, "r") as file:
         # Getting non-empty lines and inferring prefix and suffix from header
@@ -44,6 +44,6 @@ def open_ahk_as_list(path: str) -> list[Replacer]:
                     phrase = phrase[:-1 * len(suffix)]
 
                 replacement = line_parts[-1]
-                replacers.append(Replacer(phrase, replacement))
+                replacers.append([phrase, replacement])
 
-    return replacers
+    return {"prefix": prefix, "suffix": suffix, "replacers": replacers}

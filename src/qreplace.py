@@ -2,7 +2,7 @@
 from tkinter import Tk, Frame, Entry, Label, Button, Menu, PhotoImage, messagebox, filedialog
 from config_reader import ConfigReader
 from replacer_listbox import ReplacerListbox
-from toplevels import AddToplevel, EditToplevel
+from toplevels import AddToplevel, EditToplevel, OpenRecentToplevel, PreferencesToplevel, AboutToplevel
 from file_manager import save_list_as_ahk, open_ahk_as_dict
 import os
 
@@ -191,7 +191,8 @@ class QReplace(Tk):
         pass
 
     def handle_about(self):
-        pass
+        if not self.child_toplevels["about"]:
+            AboutToplevel(self)
 
     def handle_check_for_updates(self):
         pass

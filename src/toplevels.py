@@ -1,5 +1,5 @@
 # Imports
-from tkinter import Tk, Toplevel, Frame, Entry, Label, Button
+from tkinter import Tk, Toplevel, Frame, Entry, Label, Button, messagebox
 
 # Base toplevel
 class BaseToplevel(Toplevel):
@@ -50,6 +50,21 @@ class AddToplevel(BaseToplevel):
         self.add_button.pack()
 
     def handle_add(self):
+        # Getting phrase and replacement
+        phrase = self.phrase_entry.get().strip()
+        replacement = self.replacement_entry.get().strip()
+
+        # Validation
+        if not phrase:
+            messagebox.showerror("Error", "Please enter a phrase.")
+            return
+
+        if not replacement:
+            messagebox.showerror("Error", "Please enter a replacement.")
+            return
+
+        # Adding and closing
+        self.master.replacer_listbox.add_item(phrase, replacement)
         self.handle_close()
 
 
@@ -84,10 +99,25 @@ class EditToplevel(BaseToplevel):
 
         self.replacement_entry = Entry(self.information_frame)
         self.replacement_entry.grid(row=1, column=1)
-        self.phrase_entry.insert("end", original_replacement)
+        self.replacement_entry.insert("end", original_replacement)
 
         self.edit_button = Button(self, text="Edit", command=self.handle_edit)
         self.edit_button.pack()
 
     def handle_edit(self):
+        # Getting new phrase and replacement
+        phrase = self.phrase_entry.get().strip()
+        replacement = self.replacement_entry.get().strip()
+
+        # Validation
+        if not phrase:
+            messagebox.showerror("Error", "Please enter a phrase.")
+            return
+
+        if not replacement:
+            messagebox.showerror("Error", "Please enter a replacement.")
+            return
+
+        # Editing and closing
+        self.master.replacer_listbox.edit_item(self.entry_index, phrase, replacement)
         self.handle_close()

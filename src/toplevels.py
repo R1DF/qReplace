@@ -1,5 +1,5 @@
 # Imports
-from tkinter import Tk, Toplevel, Frame, Entry, Label, Button, PhotoImage, messagebox
+from tkinter import Tk, Toplevel, Frame, Entry, Label, Button, Listbox, Scrollbar, PhotoImage, messagebox
 import os
 import webbrowser
 
@@ -133,8 +133,34 @@ class OpenRecentToplevel(BaseToplevel):
         super().__init__(master, "open_recent")
         # Initialisation
         self.title("Open recent")
-        self.geometry("225x100")
+        self.geometry("520x170")
         self.resizable(False, False)
+
+        # Widget creation
+        self.introduction_label = Label(self, text="Double click a recent file to open from the list:")
+        self.introduction_label.pack()
+
+        self.recent_files_frame = Frame(self)
+        self.recent_files_frame.pack()
+
+        self.recent_files_listbox = Listbox(self.recent_files_frame, width=60, height=8)
+        self.recent_files_listbox.pack(side="left")
+
+        self.recent_files_scrollbar = Scrollbar(self.recent_files_frame)
+        self.recent_files_scrollbar.pack(side="right", fill="both")
+
+        self.recent_files_listbox.config(yscrollcommand=self.recent_files_scrollbar.set)
+        self.recent_files_scrollbar.config(command=self.recent_files_listbox.yview)
+
+        # Setting up listbox
+        for file in self.master.recent_files:
+            self.recent_files_listbox.insert(0, file)
+        self.recent_files_listbox.bind("<Double-1>", self.handle_double_click)
+
+    def handle_double_click(self, event=None):
+        file_path = self.recent_files_listbox.get(self.recent_files_listbox.curselection()[0])
+        self.master.handle_open(file_path)
+        self.handle_close()
 
 
 # Preferences toplevel

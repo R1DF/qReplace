@@ -4,6 +4,7 @@ from config_reader import ConfigReader
 from replacer_listbox import ReplacerListbox
 from toplevels import AddToplevel, EditToplevel, OpenRecentToplevel, PreferencesToplevel, AboutToplevel
 from file_manager import save_list_as_ahk, open_ahk_as_dict
+from replacer import Replacer
 import os
 
 
@@ -97,6 +98,28 @@ class QReplace(Tk):
         # Mainloop
         self.mainloop()
 
+    def paste_data(self, path: str, prefix: str = "", suffix: str = "", replacers_list: list[Replacer] | None = None):
+        if replacers_list is None:
+            replacers_list = []
+
+        # Adding to recent (or putting to top)
+        if path not in self.recent_files:
+            self.recent_files.append(path)
+        else:
+            self.recent_files.remove(path)
+            self.recent_files.append(path)
+
+        # Setting up prefixes
+        self.prefix_entry.delete(0, "end")
+        self.suffix_entry.delete(0, "end")
+        self.prefix_entry.insert("end", prefix)
+        self.suffix_entry.insert("end", suffix)
+
+        # Copying replacers
+        self.replacer_listbox.erase()
+        for phrase, suffix in replacers_list:
+            self.replacer_listbox.add_item(phrase, suffix)
+
     # Handler methods
     def handle_add(self):
         if not self.child_toplevels["add"]:
@@ -154,11 +177,15 @@ class QReplace(Tk):
         self.suffix_entry.delete(0, "end")
         self.replacer_listbox.erase()
 
-    def handle_open(self):
-        path = filedialog.askopenfilename(filetypes=[
-                    ("AutoHotKey file", "*.ahk")
-                ]
-            )
+    def handle_open(self, path: str = ""):
+        # Assume there is a filedialog needed if no path is provided
+        if not path:
+            path = filedialog.askopenfilename(filetypes=[
+                        ("AutoHotKey file", "*.ahk")
+                    ]
+                )
+
+        # The if statement below checks whether the dialog was cancelled or not
         if path:
             # Getting data from function
             file_data = open_ahk_as_dict(path)
@@ -166,26 +193,15 @@ class QReplace(Tk):
             suffix = file_data["suffix"]
             replacers_list = file_data["replacers"]
 
-            # Adding to recent (or putting to top)
-            if path not in self.recent_files:
-                self.recent_files.append(path)
-            else:
-                self.recent_files.remove(path)
-                self.recent_files.append(path)
-
-            # Setting up prefixes
-            self.prefix_entry.delete(0, "end")
-            self.suffix_entry.delete(0, "end")
-            self.prefix_entry.insert("end", prefix)
-            self.suffix_entry.insert("end", suffix)
-
-            # Copying replacers
-            self.replacer_listbox.erase()
-            for phrase, suffix in replacers_list:
-                self.replacer_listbox.add_item(phrase, suffix)
+            # Putting data into program
+            self.paste_data(path, prefix, suffix, replacers_list)
 
     def handle_open_recent(self):
-        pass
+        if not self.child_toplevels["open_recent"]:
+            if self.recent_files:
+                OpenRecentToplevel(self)
+            else:
+                messagebox.showerror("Error", "You don't have any recent files to open.")
 
     def handle_preferences(self):
         pass

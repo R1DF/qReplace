@@ -26,6 +26,7 @@ class QReplace(Tk):
         self.resizable(False, False)
         self.geometry(f"{self.configurations.get('resolution')[0]}x{self.configurations.get('resolution')[1]}")
         self.recent_files = []
+        self.restart_prompted = False
 
         # Setting icon
         self.icon_photoimage = PhotoImage(file=os.path.join(os.getcwd(), "assets", "icon_32x32.png"))
@@ -120,6 +121,12 @@ class QReplace(Tk):
         for phrase, suffix in replacers_list:
             self.replacer_listbox.add_item(phrase, suffix)
 
+    def trigger_restart(self):
+        self.restart_prompted = True  # Used in main.py
+        messagebox.showinfo("Restart needed", "To apply changes, the program must be restarted. "
+                                              "Press OK to restart.")
+        self.destroy()
+
     # Handler methods
     def handle_add(self):
         if not self.child_toplevels["add"]:
@@ -204,7 +211,8 @@ class QReplace(Tk):
                 messagebox.showerror("Error", "You don't have any recent files to open.")
 
     def handle_preferences(self):
-        pass
+        if not self.child_toplevels["preferences"]:
+            PreferencesToplevel(self, self.configurations.configurations)
 
     def handle_about(self):
         if not self.child_toplevels["about"]:

@@ -1,3 +1,3 @@
-resolution = [440, 260]
-default_prefix = ""
+resolution = [ 440, 260,]
+default_prefix = "q~"
 default_suffix = ""

@@ -9,8 +9,13 @@ SAFE = True  # Set to false to disable error handler
 
 # Run function
 def run():
-    configurations = ConfigReader()
-    QReplace(VERSION, configurations)
+    kill = False
+    while not kill:
+        configurations = ConfigReader()
+        process = QReplace(VERSION, configurations)
+
+        if not process.restart_prompted:
+            kill = True
 
 
 # Running program

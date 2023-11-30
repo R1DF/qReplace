@@ -3,7 +3,7 @@ from config_reader import ConfigReader
 from qreplace import QReplace
 
 # Constants
-VERSION = "0.0.0"
+VERSION = "1.0.0"
 SAFE = True  # Set to false to disable error handler
 
 

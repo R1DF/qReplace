@@ -280,10 +280,13 @@ class PreferencesToplevel(BaseToplevel):
             if self.current_data != self.starter_data:
                 overwrite_configurations(self.current_data)
                 self.master.trigger_restart()
+            else:
+                super().handle_close()
+        else:
+            super().handle_close()
 
     def format_resolution(self, resolution: list[int]):
         return f"{resolution[0]}x{resolution[1]}"
-
 
 
 # About toplevel
@@ -316,3 +319,31 @@ class AboutToplevel(BaseToplevel):
                                              text="Open GitHub repository",
                                              command=lambda: webbrowser.open_new_tab(url_to_open))
         self.open_repository_button.pack()
+
+
+# Version notifier toplevel
+class VersionNotifierToplevel(BaseToplevel):
+    def __init__(self, master: Tk, new_version: str, version_notes: str = ""):
+        super().__init__(master, "version_notifier")
+        # Initialisation
+        self.title("New version!")
+        self.geometry("240x110")
+        self.resizable(False, False)
+
+        # Widget creation
+        self.new_version_label = Label(self, text="A new version was found!")
+        self.new_version_label.pack()
+
+        self.version_label = Label(self, text=f"Version: v{new_version}")
+        self.version_label.pack()
+
+        if version_notes:
+            self.version_notes_label = Label(self, text=f"Version notes:\n{version_notes}")
+            self.version_notes_label.pack()
+        else:
+            self.version_notes_label = Label(self, text="There are no version notes available.")
+            self.version_notes_label.pack()
+
+        self.open_releases_button = Button(self, text="Open releases", command=lambda:
+        webbrowser.open_new_tab("https://github.com/R1DF/qReplace/releases"))
+        self.open_releases_button.pack()

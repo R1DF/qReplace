@@ -1,10 +1,14 @@
 # Imports
 from tkinter import Tk, Frame, Entry, Label, Button, Menu, PhotoImage, messagebox, filedialog
 from config_reader import ConfigReader
+from version_checker import get_latest_version_data
 from replacer_listbox import ReplacerListbox
-from toplevels import AddToplevel, EditToplevel, OpenRecentToplevel, PreferencesToplevel, AboutToplevel
+from toplevels import (AddToplevel, EditToplevel, OpenRecentToplevel, PreferencesToplevel, AboutToplevel,
+                       VersionNotifierToplevel)
 from file_manager import save_list_as_ahk, open_ahk_as_dict
 from replacer import Replacer
+from threading import Thread
+import requests
 import os
 
 
@@ -18,7 +22,8 @@ class QReplace(Tk):
             "edit": False,
             "open_recent": False,
             "preferences": False,
-            "about": False
+            "about": False,
+            "version_notifier": False
         }
         self.version = version
         self.configurations = configurations
@@ -127,6 +132,17 @@ class QReplace(Tk):
                                               "Press OK to restart.")
         self.destroy()
 
+    def check_for_updates(self):
+        # This function must be called in a thread
+        try:
+            newest_version = get_latest_version_data()
+            if newest_version["version"] != self.version:
+                VersionNotifierToplevel(self, newest_version["version"], newest_version["note"])
+            else:
+                messagebox.showinfo("No updates", "You're on the latest version. No updates available.")
+        except requests.exceptions.ConnectionError: # If no internet
+            messagebox.showerror("Error", "A connection error occurred. Are you connected to the internet?")
+
     # Handler methods
     def handle_add(self):
         if not self.child_toplevels["add"]:
@@ -219,4 +235,7 @@ class QReplace(Tk):
             AboutToplevel(self)
 
     def handle_check_for_updates(self):
-        pass
+        # Must be a thread to not freeze window
+        if not self.child_toplevels["version_notifier"]:
+            thread = Thread(target=self.check_for_updates)
+            thread.start()

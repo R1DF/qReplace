@@ -1,3 +1,7 @@
+# Imports
+from constants import SPECIAL_TO_REPRESENTATION
+
+
 # Replacer class
 class Replacer:
     def __init__(self, phrase: str, replacement: str):
@@ -5,7 +9,13 @@ class Replacer:
         self.replacement = replacement
 
     def get_ahk_code(self, prefix: str = "", suffix: str = "") -> str:
-        return f":?c*:{prefix}{self.phrase}{suffix}::{self.replacement}"
+        replacement = ""
+
+        # Ensuring special character presence and replacing
+        for letter in self.replacement:
+            replacement += SPECIAL_TO_REPRESENTATION.get(letter, letter)
+
+        return f":?c*:{prefix}{self.phrase}{suffix}::{replacement}"
 
 
     def __repr__(self) -> str:

@@ -1,5 +1,6 @@
 # Imports
 from replacer import Replacer
+from constants import REPRESENTATION_TO_SPECIAL
 import re
 
 
@@ -44,6 +45,11 @@ def open_ahk_as_dict(path: str) -> dict:
                     phrase = phrase[:-1 * len(suffix)]
 
                 replacement = line_parts[-1]
+
+                # Converting specific replacements ({+} ---> +)
+                for representation, special_character in REPRESENTATION_TO_SPECIAL:
+                    replacement = replacement.replace(representation, special_character)
+
                 replacers.append([phrase, replacement])
 
     return {"prefix": prefix, "suffix": suffix, "replacers": replacers}
